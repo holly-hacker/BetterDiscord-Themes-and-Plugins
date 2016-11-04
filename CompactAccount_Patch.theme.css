@@ -1,0 +1,48 @@
+//META{"name":"Compact_Account_Patch","description":"A patch to work with ClearVision<br><br>Made for Compact Account v2.0 by Maple#1234 and ClearVision 4.0.0 by Zerthox#1999","author":"HoLLy#2750","version":"2.0"}*//{}
+
+/*undo hover by ClearVision*/
+.account .avatar-small:hover, .account .avatar-small.popout-open {
+    width: 80px;
+    height: 68px;
+}
+.bd-minimal .account .avatar-small:hover, .bd-minimal .account .avatar-small.popout-open {
+    height: 46px;
+    width: 55px;
+}
+
+/*fixes selectable user status w/ ClearVision*/
+.account {
+    margin-bottom: 0 !important;
+}
+.channels-wrap .account .status { /*just scream louder than ClearVision*/
+    top: auto !important;
+    bottom: -2px !important;
+    border-top: 2px solid #f9f9f9 !important;
+    border-bottom: 2px solid #f9f9f9 !important;
+    border-right: 2px solid #f9f9f9 !important;
+    border-color: #f9f9f9 !important;
+}
+.status-picker {
+    padding: 0 !important;
+    background: white !important;
+}
+.status-picker .popout-menu-item {
+    margin: 0px !important;
+}
+
+/*move ClearVision watermark*/
+.account::after {
+    margin-left: 83px;
+}
+.bd-minimal .account::after {
+    margin-left: 58px;
+}
+
+/*make sure it actually works on non-minimal mode, tbh I don't like how this is done but it works*/
+body:not(.bd-minimal) .popout.popout-top .status-picker {
+    margin-top: 0 !important;
+}
+
+body:not(.bd-minimal) .account .avatar-small {
+    left: -5px;
+}
