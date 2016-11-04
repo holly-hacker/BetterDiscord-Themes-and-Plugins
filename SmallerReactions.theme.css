@@ -2,14 +2,14 @@
 
 .reaction {
     margin: 0px;
-	border-radius: 0px;
+    border-radius: 0px;
     padding: 0px 5px 0 0;
     height: 16px !important;
 }
 .reaction .reaction-count {
-	margin-left: 2px;
-    font-size: 14px;
-    line-height: 16px !portant;
+    margin-left: 2px;
+    font-size: 16px;
+    line-height: 16px !important;
     height: 16px !important;
 }
 
