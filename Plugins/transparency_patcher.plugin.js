@@ -92,7 +92,7 @@ var transparency_patcher = function() {
 			    }
 
 			    console.log("The file was saved!");
-			    alert("Edited config file has been written!\n\nPlease restart Discord and then press CTRL+R to completely enable transparency.");
+			    alert("Edited config file has been written!\n\nPlease restart Discord and then reload using CTRL+R to completely enable transparency.");
 			}); 
 		});
 	};
