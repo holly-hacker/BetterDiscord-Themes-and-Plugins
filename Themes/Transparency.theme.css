@@ -19,7 +19,9 @@ body {
 /*inside channels wrapper*/
 .guild-header header, 
 .guild-channels, 
-.account {
+.account,
+.private-channels, 
+.search-bar {
     background-color: transparent;
 }
 .guild-header header:hover, 
@@ -27,7 +29,9 @@ body {
     background: rgba(0,0,0,0.15);
 }
 .guild-channels .channel-text.selected, 
-.guild-channels .channel-text:hover{
+.guild-channels .channel-text:hover, 
+.private-channels .channel.selected, 
+.private-channels .channel:hover {
     background: rgba(0,0,0,0.15)!important;
 }
 
@@ -39,16 +43,20 @@ body {
 .messages-wrapper, 
 .chat form .typing, 
 .chat>.content, 
-.chat {
+.chat, 
+#friends .friends-header, 
+.friends-table {
     background: transparent!important;
 }
 .chat .content .flex-spacer, 
-.channel-members {
+.channel-members, 
+#friends {
     background: rgba(0,0,0,0.6)!important;
 }
 
-.theme-dark .channel-members .member.popout-open, 
-.theme-dark .channel-members .member:hover {
+.channel-members .member.popout-open, 
+.channel-members .member:hover, 
+#friends .friends-table .friends-row:hover {
     background: rgba(0,0,0,0.15)!important;
 }
 
