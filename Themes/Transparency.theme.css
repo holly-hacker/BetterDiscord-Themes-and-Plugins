@@ -1,0 +1,87 @@
+//META{"name":"Transparency","description":"Discord transparency<br>Proof of concept, requires transparency patch.","author":"<a href='https://github.com/HoLLy-HaCKeR' target='_new'>HoLLy#2750</a>","version":"1.0"}*//{}
+
+
+/*standard 50% transparency on everything, change to your liking.*/
+body {
+    background-color: rgba(0,0,0, 0.5);
+}
+
+/*guild wrapper*/
+.guilds-wrapper {
+    background-color: rgba(0,0,0,0.5)!important;
+}
+
+/*channels wrapper*/
+.channels-wrap {
+    background-color: rgba(0,0,0,0.5)!important;
+}
+
+/*inside channels wrapper*/
+.guild-header header, 
+.guild-channels, 
+.account {
+    background-color: transparent;
+}
+.guild-header header:hover, 
+.guild-header.popout-open header {
+    background: rgba(0,0,0,0.15);
+}
+.guild-channels .channel-text.selected, 
+.guild-channels .channel-text:hover{
+    background: rgba(0,0,0,0.15)!important;
+}
+
+/*chat and shit*/
+.chat .title-wrap {
+    background: rgba(0,0,0,0.5)!important;
+}
+
+.messages-wrapper, 
+.chat form .typing, 
+.chat>.content, 
+.chat {
+    background: transparent!important;
+}
+.chat .content .flex-spacer, 
+.channel-members {
+    background: rgba(0,0,0,0.6)!important;
+}
+
+.theme-dark .channel-members .member.popout-open, 
+.theme-dark .channel-members .member:hover {
+    background: rgba(0,0,0,0.15)!important;
+}
+
+/*scrollbars*/
+.friends-table .scroller-wrap ::-webkit-scrollbar-thumb, 
+.messages-wrapper .scroller-wrap ::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.4)!important;
+    border: none!important;
+}
+.friends-table .scroller-wrap ::-webkit-scrollbar-track-piece, 
+.messages-wrapper .scroller-wrap ::-webkit-scrollbar-track-piece {
+    background: transparent!important;
+    border: none!imporant;
+}
+
+.scroller-wrap .scroller::-webkit-scrollbar-thumb, 
+.scroller-wrap .scroller::-webkit-scrollbar-track-piece {
+    border: none!important;
+}
+
+/*buttons*/
+.account .btn, 
+.account .btn:active{
+    background: rgba(100,100,100,0.2);
+}
+
+/*randoms*/
+#bd-customcss-detach-container {
+    background: rgba(0,0,0,0.5)!important;
+}
+.guilds-wrapper .guilds-add {
+    background: rgba(0,0,0,0.6);
+}
+.messages-wrapper .messages .divider span {
+    background: transparent!important;
+}
