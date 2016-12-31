@@ -19,9 +19,11 @@ var transparency_patcher = function() {
 
 	this.getSettingsPanel = function () {
 		var string = "<h3>Settings Panel</h3>";
-		var js = 'BdApi.getPlugin("' + this.getName() + '").patchForTransparency();';
-		string += "Press this button to apply the patch: </br>";
-		string += "<button onclick='" + js + "'>I'm that button you need to press.</button>";
+		var js1 = 'BdApi.getPlugin("' + this.getName() + '").patchForTransparency(false);';
+		var js2 = 'BdApi.getPlugin("' + this.getName() + '").patchForTransparency(true);';
+		string += "Use these buttons to apply or remove the patch: </br>";
+		string += "<button onclick='" + js1 + "'>Enable patch</button>";
+		string += "<button onclick='" + js2 + "'>Disable patch</button>";
 
 	    return string;
 	};
@@ -30,7 +32,9 @@ var transparency_patcher = function() {
 		console.log("%c[" + this.pluginName + "]%c " + msg, "color: #DABEEF; font-weight: bold;", "");
 	};
 
-	this.patchForTransparency = function() {
+	this.patchForTransparency = function(undo) {
+		var errors = "";
+
 		var file = require('electron').remote.app.getAppPath() + "\\index.js";
 
 		var line1Pattern = "transparent: ";
@@ -61,21 +65,45 @@ var transparency_patcher = function() {
 			for (var i = 0; i < split.length; i++) {
 				if (split[i].indexOf(line1Pattern) !== -1) {
 					var origaa = split[i];
-					if (split[i].indexOf(line1Original) !== -1) {
-						split[i] = split[i].replace(line1Original, line1New);	//in case it's minimized.
-						console.log("Patched 'transparent: false' on line " + (i+1));
-					} else {
-						//already enabled
-						console.warn("Already patched transparent: false!");
+					if (!undo) {	//false to true
+						if (split[i].indexOf(line1Original) !== -1) {
+							split[i] = split[i].replace(line1Original, line1New);
+							console.log("Patched 'transparent: false' to true on line " + (i+1));
+						} else {
+							//already enabled
+							console.warn("Already patched transparent: false!");
+							errors += 'Already patched "transparent: false"!\n';
+						}
+					} else {	//true to false, undo patch
+						if (split[i].indexOf(line1New) !== -1) {
+							split[i] = split[i].replace(line1New, line1Original);
+							console.log("Patched 'transparent: true' to false on line " + (i+1));
+						} else {
+							//already enabled
+							console.warn("Already patched transparent: false!");
+							errors += 'Already patched "transparent: false"!\n';
+						}
 					}
 				} 
-				if (split[i].indexOf(line2Pattern) !== -1) {
-					if (split[i].indexOf(line2ToAdd) === -1) {
-						split[i] += line2ToAdd;
-						console.log("Added enable-transparent-visuals on line " + (i+1));
+				if (split[i].indexOf(line2Pattern) !== -1) {	//found line to patch
+					if (!undo) {
+						if (split[i].indexOf(line2ToAdd) === -1) {	//patch not added yet
+							split[i] += line2ToAdd;
+							console.log("Added enable-transparent-visuals on line " + (i+1));
+						} else {
+							//already added
+							console.warn("Already added enable-transparent-visuals!");
+							errors += 'Already added "enable-transparent-visuals"!\n';
+						}
 					} else {
-						//already added
-						console.warn("Already added enable-transparent-visuals!");
+						if (split[i].indexOf(line2ToAdd) !== -1) {	//patch already added
+							split[i] = line2Pattern;
+							console.log("Removed enable-transparent-visuals on line " + (i+1) + " by restoring the original.");
+						} else {
+							//already removed
+							console.warn("enable-transparent-visuals was not present on line " + (i+1) + "!");
+							errors += "enable-transparent-visuals was not present on line " + (i+1) + "!\n";
+						}
 					}
 				}
 			}
@@ -86,13 +114,17 @@ var transparency_patcher = function() {
 			//write
 			fs.writeFile(file, toWrite, function(err2) {
 			    if(err2) {
-					alert("Unable to write file to " + file + ". See console for error object.");
+					//alert("Unable to write file to " + file + ". See console for error object.");
+					errors += "Unable to write file to " + file + ". See console for error object.";
 					console.error("Error while writing file: ", err2);
-					return;
 			    }
 
 			    console.log("The file was saved!");
-			    alert("Edited config file has been written!\n\nPlease restart Discord and then reload using CTRL+R to completely enable transparency.");
+
+			    if (errors !== "")
+			    	alert(errors, "We may or may not have some problems...\n\n" + errors);
+			    else
+			    	alert("Edited config file has been written!\n\nPlease restart Discord and then reload using CTRL+R to complete the patch.", "Success!");
 			}); 
 		});
 	};
