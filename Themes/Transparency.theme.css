@@ -70,7 +70,7 @@ body {
 .friends-table .scroller-wrap ::-webkit-scrollbar-track-piece, 
 .messages-wrapper .scroller-wrap ::-webkit-scrollbar-track-piece {
     background: transparent!important;
-    border: none!imporant;
+    border: none!important;
 }
 
 .scroller-wrap .scroller::-webkit-scrollbar-thumb, 
