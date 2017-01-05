@@ -35,7 +35,7 @@ var transparency_patcher = function() {
 	this.patchForTransparency = function(undo) {
 		var errors = "";
 
-		var file = require('electron').remote.app.getAppPath() + "\\index.js";
+		var file = require('electron').remote.app.getAppPath() + "/index.js";
 
 		var line1Pattern = "transparent: ";
 		var line1Original = "transparent: false";
