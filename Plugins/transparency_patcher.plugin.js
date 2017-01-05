@@ -5,7 +5,7 @@ var transparency_patcher = function() {
 
 	this.getName = 			function()	{return this.pluginName;};
 	this.getDescription = 	function()	{return 'Transparency Patcher - Patches your Discord installation to allow for transparent themes.</br>You don\'t need this plugin after installation is finished.</br></br>Press "Settings" to apply.';};
-	this.getVersion = 		function()	{return '1.0';};
+	this.getVersion = 		function()	{return '2.1';};
 	this.getAuthor = 		function()	{return '<a href="http://JustM3.net">HoLLy#2750</a>';};
 
 	this.load = function()	{ 	this.Log("Loaded");		};
