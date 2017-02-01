@@ -1,0 +1,53 @@
+//META{"name":"Minimal Tweaks","description":"Tweaks for BetterDiscord's Minimal mode.<br>Requires my <a href='https://github.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/blob/master/Plugins/lazyload_patcher.plugin.js'>LazyLoad Patcher</a> with channel height set to 18px.","author":"<a href='http://JustM3.net'>HoLLy#2750</a>","version":"1.0"}*//{}
+
+/*channels: text channels smaller*/
+.bd-minimal .channel-text a {
+    padding: 1px 5px!important;
+}
+
+/*member list: make member list header prettier*/
+.bd-minimal .channel-members h2 {
+    font-size: 0.8em; /*just a bit larger*/
+    margin-bottom: 3px;
+    margin-top: 0;
+    padding-left: 7.5px;
+}
+
+/*member list: make member list prettier*/
+.bd-minimal .channel-members h2:not(:first-of-type) {
+    margin-top: 6px;
+}
+
+/*guilds: unread notification for friend invites*/
+.bd-minimal .guilds-wrapper .guilds .guild .badge {
+    min-width: 10px;
+    padding: 1px;
+    text-align: center;
+}
+
+/*member list: space between members in member list*/
+.bd-minimal .channel-members .member {
+    padding: 3px;
+}
+
+/*channels: unread notification*/
+.bd-minimal .guild-channels .channel-text.unread:not(.selected):not(.channel-muted):before {
+    top: 4px;
+    width: 11px;
+}
+
+/*channels: move # closer to channel names*/
+.bd-minimal .guild-channels .channel-text .channel-name:before {
+    margin-right: 0;
+}
+
+/*edit message: remove extra avatar*/
+.bd-minimal .edit-message .avatar-large {
+    display: none;
+}
+
+/*edit message: move edit box to the right*/ 
+.bd-minimal .edit-container-inner{
+    margin-left: 60px;
+}
+
