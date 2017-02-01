@@ -1,11 +1,16 @@
 //META{"name":"lazyload_patcher"}*//
 
+//jshint esversion: 6
+
+//TODO: somehow reload/redraw the Channels object, for seamless patching
+//TODO: find Channels prototype without it being added to the DOM, also for seamless patching
+
 var lazyload_patcher = function() {
 	this.pluginName = 'LazyLoad Patcher';
 
 	this.getName = 			function()	{return this.pluginName;};
 	this.getDescription = 	function()	{return 'LazyLoad Patcher - Patches Discord\'s lazy loading to allow for themes that modify channel heights.</br></br>Credits to noodlebox#0155 for their help and code on react objects.';};
-	this.getVersion = 		function()	{return '. preview';};
+	this.getVersion = 		function()	{return '1.0 preview';};
 	this.getAuthor = 		function()	{return '<a href="http://JustM3.net">HoLLy#2750</a>';};
 
 	this.patches = [{selector: ".guild-channels", funcName: "getRowHeight", storageName: "channelRowHeight", default: 36}];
@@ -13,20 +18,29 @@ var lazyload_patcher = function() {
 	this.load = function()	{
 		this.Log("Loaded");
 
-		//TODO: dynamic
-		if (bdPluginStorage.get(this.pluginName, 'channelRowHeight') == null) {
-			bdPluginStorage.set(this.pluginName, 'channelRowHeight', 36);	//default value (for cozy, atleast)
+		//set default settings
+		for (var i = 0; i < this.patches.length; i++) {
+			if (bdPluginStorage.get(this.pluginName, this.patches[i].storageName) === null)
+				bdPluginStorage.set(this.pluginName, this.patches[i].storageName, this.patches[i].default);
 		}
 	};
 
 	this.start = function() {
 		this.Log("Started");
 
-		for (var i = 0; i < this.patches.length; i++) {
-			var patch = this.patches[i];
-			this.patchSomething(patch["selector"], patch["funcName"], patch["storageName"]);
+		//if we start up to the friends page, channels won't be loaded
+		if (location.pathname.startsWith('/channels/@me')) {
+
+			//so, we run our patching code once, when we click a guild icon
+			$('.guild').has('.avatar-small').on('click.llpPatcher', () => {
+
+				//run after 1000ms, to make sure it is loaded
+				setTimeout(() => this.doChatPatch(), 1000);
+				$('.guild').off('click.llpPatcher');
+			});
+		} else {
+			this.doChatPatch();
 		}
-		
 	};
 
 	this.stop = function()	{ 	this.Log("Stopped");	};
@@ -37,30 +51,41 @@ var lazyload_patcher = function() {
 	this.observer = function(e) {};
 
 	this.getSettingsPanel = function () {
-		var str = '<b>Enter new channel height: </b><input type="number" id="llInputChannelHeight" \
-		value="' + bdPluginStorage.get(this.pluginName, 'channelRowHeight') + '" /><br>\
-		<!-- more options go here, some day <br> -->\
-		<br><button onClick="llSave()">Save new settings</button><br>';
-		var js = '<script>\
-				function llSave() { \
-					var ch = parseInt($(\'#llInputChannelHeight\').val()); \
-					if (ch != null && ch != "") { \
-						bdPluginStorage.set("' + this.pluginName + '", "channelRowHeight", ch); \
-						alert("Please restart the plugin to apply changes.") \
-					} \
-				}</script>';
-		var js = '';
+		var str = `<b>Enter new channel height: </b><input type="number" id="llInputChannelHeight" 
+		value="${bdPluginStorage.get(this.pluginName, 'channelRowHeight')}" /><br>
+		<!-- more options go here, some day <br> -->
+		<br><button onClick="llSave()">Save new settings</button><br>`;
+		var js = `<script>
+				function llSave() { 
+					var ch = parseInt($('#llInputChannelHeight').val()); 
+					if (ch != null && ch != "") { 
+						bdPluginStorage.set("${this.pluginName}", "channelRowHeight", ch); 
+						alert("Please restart the plugin to apply changes.") 
+					} 
+				}</script>`;
 		var info = 'Channel height is 36 by default, 28(?) for minimal mode.';
 
 		return str+js+info;
 
 	};	//TODO: make proper
 
-	//BUG: does not work when in /channels/@me
+	this.doChatPatch = function() {
+
+		//this.Log('in doChatPatch right now, this is ' + this.constructor.name);
+		for (var i = 0; i < this.patches.length; i++) {
+			var patch = this.patches[i];
+			this.patchSomething(patch.selector, patch.funcName, patch.storageName);
+		}
+		this.Log('finished doChatPatch');
+	};
+
 	this.patchSomething = function(selector, funcName, storageName) {
 		try {
 			//get stuff, make stuff
-			var inst = getOwnerInstance($(selector)[0]);
+			var instList = $(selector);
+			if (instList.length === 0) throw "Could not find selector.";
+			var inst = getOwnerInstance(instList[0]);
+
 			var newVar = (bdPluginStorage.get(this.pluginName, storageName));
 			var patchedFunc = function() {return newVar;};
 
@@ -69,16 +94,16 @@ var lazyload_patcher = function() {
 
 			//patch new instances, credits to noodlebox
 			var index = inst.__reactAutoBindPairs.findIndex(n => n === funcName);
-			if (index == -1) throw "couldn't find " + funcName + " in __reactAutoBindPairs for " + selector;
+			if (index == -1) throw "couldn't find " + funcName + " in __reactAutoBindPairs for selector" + selector;
 			inst.constructor.prototype[funcName] = inst.constructor.prototype.__reactAutoBindPairs[index+1] = patchedFunc;
 
 			//success
 			this.Log("Patched " + funcName);
 		} catch(err) {
-			//something went wrong. should make this mroe verbose
+			//something went wrong. I should make this more verbose
 			this.Log("Failed to patch " + funcName + ": " + err.message, "error");
 		}
-	}
+	};
 
 	this.Log = function(msg, method = "log") {
 		console[method]("%c[" + this.pluginName + "]%c " + msg, "color: #DABEEF; font-weight: bold;", "");
@@ -136,5 +161,5 @@ var lazyload_patcher = function() {
 	    }
 
 	    return null;
-	}
+	};
 };
