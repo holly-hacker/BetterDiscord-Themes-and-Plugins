@@ -1,7 +1,7 @@
 # Transparency
 From what I know, first theme to use window transparency.
 
-This requires my [Transparency Patcher](/Plugins/transparency_patchermd), without it the theme will look very black.
+This requires my [Transparency Patcher](/Plugins/transparency_patcher.md), without it the theme will look very black.
 
 ### Download
 [Source](/Themes/Transparency.theme.css)
