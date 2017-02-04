@@ -1,10 +1,10 @@
 # Transparency
 From what I know, first theme to use window transparency.
 
-This requires my [Transparency Patcher](Plugins/transparency_patcher.plugin.js), without it the theme will look very black.
+This requires my [Transparency Patcher](/Plugins/transparency_patcher.plugin.js), without it the theme will look very black.
 
 ### Download
-[Source](Themes/Transparency.theme.css)
+[Source](/Themes/Transparency.theme.css)
 [Raw](https://raw.githubusercontent.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/master/Themes/Transparency.theme.css)
 
 ### Background

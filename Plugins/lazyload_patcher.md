@@ -6,7 +6,7 @@ This plugin patches some code in the Discord client so that themes that modify v
 Install and enable.
 
 ### Download
-[Source](Plugins/lazyload_patcher.plugin.js)
+[Source](/Plugins/lazyload_patcher.plugin.js)
 [Raw](https://raw.githubusercontent.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/master/Plugins/lazyload_patcher.plugin.js)
 
 ### Screenshots
@@ -17,8 +17,8 @@ Install and enable.
 ###### Minimal mode with patch set to 28px:
 ![Minimal mode + 28px patch](http://i.imgur.com/3GczCCY.png)
 
-###### Minimal mode + [Minimal Tweaks](Themes/MinimalTweaks.md) without patch
+###### Minimal mode + [Minimal Tweaks](/Themes/MinimalTweaks.md) without patch
 ![Minimal Tweaks](http://i.imgur.com/69Bhz0l.png)
 
-###### Minimal mode + [Minimal Tweaks](Themes/MinimalTweaks.md) with patch set to 18px:
+###### Minimal mode + [Minimal Tweaks](/Themes/MinimalTweaks.md) with patch set to 18px:
 ![Minimal Tweaks + 18px patch](http://i.imgur.com/2ApEKFJ.png)

@@ -3,7 +3,7 @@
 Decreases the size of Discord's reactions.
 
 ### Download
-[Source](Themes/SmallerReactions.theme.css)
+[Source](/Themes/SmallerReactions.theme.css)
 [Raw](https://raw.githubusercontent.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/master/Themes/SmallerReactions.theme.css)
 
 ### Screenshots
