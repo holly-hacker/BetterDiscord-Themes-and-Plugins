@@ -10,7 +10,7 @@ var lazyload_patcher = function() {
 
 	this.getName = 			function()	{return this.pluginName;};
 	this.getDescription = 	function()	{return 'LazyLoad Patcher - Patches Discord\'s lazy loading to allow for themes that modify channel heights.</br></br>Credits to noodlebox#0155 for their help and code on react objects.';};
-	this.getVersion = 		function()	{return '1.0 preview';};
+	this.getVersion = 		function()	{return '1.0';};
 	this.getAuthor = 		function()	{return '<a href="http://JustM3.net">HoLLy#2750</a>';};
 
 	this.patches = [{selector: ".guild-channels", funcName: "getRowHeight", storageName: "channelRowHeight", default: 36}];
@@ -63,7 +63,7 @@ var lazyload_patcher = function() {
 						alert("Please restart the plugin to apply changes.") 
 					} 
 				}</script>`;
-		var info = 'Channel height is 36 by default, 28(?) for minimal mode.';
+		var info = 'Channel height is 36 by default, 28 for minimal mode.';
 
 		return str+js+info;
 
