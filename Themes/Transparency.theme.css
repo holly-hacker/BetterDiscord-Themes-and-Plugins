@@ -1,7 +1,7 @@
 //META{"name":"Transparency","description":"Discord transparency<br>Proof of concept, requires <a href='https://github.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/tree/master/Plugins'>transparency patch</a>.","author":"<a href='https://github.com/HoLLy-HaCKeR' target='_new'>HoLLy#2750</a>","version":"1.0"}*//{}
 
 /*fix for stupid discord update*/
-.layers { background: transparent !important; }
+.layers, .layer { background: transparent !important; }
 
 /*standard 50% transparency on everything, change to your liking.*/
 body {
