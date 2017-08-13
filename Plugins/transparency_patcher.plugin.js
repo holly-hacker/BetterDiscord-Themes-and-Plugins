@@ -114,7 +114,7 @@ var transparency_patcher = function() {
 					var origaa = split[i];
 					if (!undo) {	//false to true
 						if (split[i].indexOf(line3Original) !== -1) {
-							split[i] = split[i].replace(line3Original, line1New);
+							split[i] = split[i].replace(line3Original, line3New);
 							console.log("Patched backgroundColor: 'ACCOUNT_GREY' to '#00000000' on line " + (i+1));
 						} else {
 							//already enabled
