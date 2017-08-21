@@ -5,7 +5,7 @@ var transparency_patcher = function() {
 
 	this.getName = 			function()	{return this.pluginName;};
 	this.getDescription = 	function()	{return 'Transparency Patcher - Patches your Discord installation to allow for transparent themes.</br>You don\'t need this plugin after installation is finished.</br></br>Press "Settings" to apply.';};
-	this.getVersion = 		function()	{return '2.1';};
+	this.getVersion = 		function()	{return '2.2';};
 	this.getAuthor = 		function()	{return '<a href="http://JustM3.net">HoLLy#2750</a>';};
 
 	this.load = function()	{ 	this.Log("Loaded");		};
@@ -43,6 +43,10 @@ var transparency_patcher = function() {
 
 		var line2Pattern = "var app = _electron2.default.app;";
 		var line2ToAdd = "app.commandLine.appendSwitch('enable-transparent-visuals');";
+		
+		var line3Pattern = "backgroundColor: ";
+		var line3Original = "backgroundColor: ACCOUNT_GREY";
+		var line3New = "backgroundColor: '#00000000'";
 
 		//open file
 		fs = require("fs");
@@ -106,6 +110,28 @@ var transparency_patcher = function() {
 						}
 					}
 				}
+				if (split[i].indexOf(line3Pattern) !== -1) {
+					var origaa = split[i];
+					if (!undo) {	//false to true
+						if (split[i].indexOf(line3Original) !== -1) {
+							split[i] = split[i].replace(line3Original, line3New);
+							console.log("Patched backgroundColor: 'ACCOUNT_GREY' to '#00000000' on line " + (i+1));
+						} else {
+							//already enabled
+							console.warn("Already patched backgroundColor: 'ACCOUNT_GREY'!");
+							errors += 'Already patched backgroundColor: "ACCOUNT_GREY"!\n';
+						}
+					} else {	//true to false, undo patch
+						if (split[i].indexOf(line3New) !== -1) {
+							split[i] = split[i].replace(line3New, line3Original);
+							console.log("Patched backgroundColor: '#00000000' to 'ACCOUNT_GREY' on line " + (i+1));
+						} else {
+							//already enabled
+							console.warn("Already patched backgroundColor: '#00000000'!");
+							errors += 'Already patched backgroundColor: "#00000000"!\n';
+						}
+					}
+				} 
 			}
 
 			//join everything again
