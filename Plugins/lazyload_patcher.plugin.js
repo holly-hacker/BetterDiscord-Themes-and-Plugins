@@ -10,7 +10,7 @@ var lazyload_patcher = function() {
 
 	this.getName = 			function()	{return this.pluginName;};
 	this.getDescription = 	function()	{return 'LazyLoad Patcher - Patches Discord\'s lazy loading to allow for themes that modify channel and section heights. Credits to noodlebox#0155, Mydayyy#0344 and Kakkela#6315';};
-	this.getVersion = 		function()	{return '1.3';};
+	this.getVersion = 		function()	{return '1.3.0.1';};
 	this.getAuthor = 		function()	{return 'HoLLy#2750';};
 
 	this.patches = [
@@ -50,7 +50,7 @@ var lazyload_patcher = function() {
 		if (location.pathname.startsWith('/channels/@me')) {
 			ctr = 1;
 		} else {
-			if ($('.containerDefault-1bbItS').height() == null && ctr < 1 ) {
+			if ($('.containerDefault-1bbItS').height() == null && ctr > 0 ) {
 				setTimeout(() => this.doChatPatch(), 1000);
 				ctr = 1;
 			} else {
@@ -112,7 +112,7 @@ var lazyload_patcher = function() {
         var instList = $(selector);
         if (instList.length === 0) throw "Could not find selector.";
 
-        var newVar2 = $('.containerDefault-1bbItS').height();
+        var newVar2 = 0 ;
         var patchedFunc = function() {return newVar2;};
         
         const getInternalInstance = e => e[Object.keys(e).find(k => k.startsWith("__reactInternalInstance"))];
