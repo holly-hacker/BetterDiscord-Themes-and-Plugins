@@ -2,35 +2,30 @@
 
 //jshint esversion: 6
 
-// This is not the cleanest code, as we now have hardcoded the path to the getRowHeight function, but it will get the job done for now
-
+//TODO: somehow reload/redraw the Channels object, for seamless patching
+//TODO: find Channels prototype without it being added to the DOM, also for seamless patching
 
 var lazyload_patcher = function() {
 	this.pluginName = 'LazyLoad Patcher';
 
 	this.getName = 			function()	{return this.pluginName;};
-	this.getDescription = 	function()	{return 'LazyLoad Patcher - Patches Discord\'s lazy loading to allow for themes that modify channel heights.</br></br>Credits to noodlebox#0155 for their help and code on react objects. 3/25 fix by Mydayyy#0344';};
-	this.getVersion = 		function()	{return '1.1';};
-	this.getAuthor = 		function()	{return '<a href="http://JustM3.net">HoLLy#2750</a>';};
+	this.getDescription = 	function()	{return 'LazyLoad Patcher - Patches Discord\'s lazy loading to allow for themes that modify channel and section heights. Credits to noodlebox#0155, Mydayyy#0344 and Kakkela#6315';};
+	this.getVersion = 		function()	{return '1.3';};
+	this.getAuthor = 		function()	{return 'HoLLy#2750';};
 
-	this.patches = [{selector: ".guild-channels", funcName: "getRowHeight", storageName: "channelRowHeight", default: 36, patchFunction: function(selector, funcName, storageName) {this.patchRowHeight(selector, funcName, storageName);}.bind(this)}];
-
+	this.patches = [
+        {selector: ".scroller-NXV0-d", funcName: "getRowHeight", patchFunction: function(selector, funcName) {this.patchRowHeight(selector, funcName)}.bind(this)},
+        {selector: ".scroller-NXV0-d", funcName: "getSectionHeight", patchFunction: function(selector, funcName) {this.patchSectionHeight(selector, funcName)}.bind(this)}
+    ];
+	
 	var ctr = 0;
-
+	
 	this.load = function()	{
 		this.Log("Loaded");
-
-		//set default settings
-		for (var i = 0; i < this.patches.length; i++) {
-			if (bdPluginStorage.get(this.pluginName, this.patches[i].storageName) === null)
-				bdPluginStorage.set(this.pluginName, this.patches[i].storageName, this.patches[i].default);
-		}
 	};
-
+	
 	this.start = function() {
 		this.Log("Started");
-
-
 		//if we start up to the friends page, channels won't be loaded
 		if (location.pathname.startsWith('/channels/@me')) {
 
@@ -42,7 +37,7 @@ var lazyload_patcher = function() {
 				$('.guild').off('click.llpPatcher');
 			});
 		} else {
-			this.doChatPatch();
+			setTimeout(() => this.doChatPatch(), 1000);
 		}
 	};
 
@@ -50,52 +45,45 @@ var lazyload_patcher = function() {
 	this.unload = function(){	this.Log("Unloaded");	};
 
 	this.onMessage = function() {};
-	this.onSwitch = function()  {
-		// Discord deletes the guild-channel node when switching to DM's. We need to watch onSwitch and reapply our fix.
+	
+	this.onSwitch = function()  {	
 		if (location.pathname.startsWith('/channels/@me')) {
 			ctr = 1;
 		} else {
-			if (ctr > 0 ) {
-				this.doChatPatch();
-				ctr = 0;
+			if ($('.containerDefault-1bbItS').height() == null && ctr < 1 ) {
+				setTimeout(() => this.doChatPatch(), 1000);
+				ctr = 1;
+			} else {
+				if ($('.containerDefault-1bbItS').height() !== null && ctr > 0 ) {
+					setTimeout(() => this.doChatPatch(), 1000);
+					ctr = 0;
+				} else {
+				}
 			}
-		}
+		}	
 	};
-
+	
 	this.observer = function(e) {};
 
-	this.getSettingsPanel = function () {
-		var str = `<b>Enter new channel height: </b><input type="number" id="llInputChannelHeight"
-		value="${bdPluginStorage.get(this.pluginName, 'channelRowHeight')}" /><br>
-		<!-- more options go here, some day <br> -->
-		<br><button onClick="llSave()">Save new settings</button><br>`;
-		var js = `<script>
-				function llSave() {
-					var ch = parseInt($('#llInputChannelHeight').val());
-					if (ch != null && ch != "") {
-						bdPluginStorage.set("${this.pluginName}", "channelRowHeight", ch);
-						alert("Please restart the plugin to apply changes.")
-					}
-				}</script>`;
-		var info = 'Channel height is 36 by default, 28 for minimal mode.';
-
-		return str+js+info;
-
-	};
+	this.getSettingsPanel = function () {};
 
 	this.doChatPatch = function() {
+
+		//this.Log('in doChatPatch right now, this is ' + this.constructor.name);
 		for (var i = 0; i < this.patches.length; i++) {
 			var patch = this.patches[i];
-			this.patchSomething(patch.selector, patch.funcName, patch.storageName, patch.patchFunction);
+			this.patchSomething(patch.selector, patch.funcName, patch.patchFunction);
 		}
 		this.Log('finished doChatPatch');
 	};
 
-	this.patchSomething = function(selector, funcName, storageName, patchFunction) {
+	this.patchSomething = function(selector, funcName, patchFunction) {
 		try {
-			patchFunction(selector, funcName, storageName);
+			patchFunction(selector, funcName);
+			//success
 			this.Log("Patched " + funcName);
 		} catch(err) {
+			//something went wrong. I should make this more verbose
 			this.Log("Failed to patch " + funcName + ": " + err.message, "error");
 		}
 	};
@@ -104,17 +92,32 @@ var lazyload_patcher = function() {
 		console[method]("%c[" + this.pluginName + "]%c " + msg, "color: #DABEEF; font-weight: bold;", "");
 	};
 
-	this.patchRowHeight = function(selector, funcName, storageName) {
+	this.patchRowHeight = function(selector, funcName) {
+		//get stuff, make stuff
 		var instList = $(selector);
 		if (instList.length === 0) throw "Could not find selector.";
 
-		var newVar = (bdPluginStorage.get(this.pluginName, storageName));
+		var newVar = $('.containerDefault-7RImuF').height();
 		var patchedFunc = function() {return newVar;};
-
+		
 		const getInternalInstance = e => e[Object.keys(e).find(k => k.startsWith("__reactInternalInstance"))];
 		var inst = getInternalInstance(instList[0]);
-		inst._currentElement._owner._currentElement._owner._currentElement._owner._instance.getRowHeight =  patchedFunc; // We hardcoded the path here.. probably need to adjust that more often now
-		inst._currentElement._owner._currentElement._owner._currentElement._owner._instance.handleListScroll(); // This will force a refresh. Otherwise we would have to scroll once in order for the missing channels to show up
+		inst._currentElement._owner._currentElement._owner._currentElement._owner._instance.getRowHeight =  patchedFunc;
+		inst._currentElement._owner._currentElement._owner._currentElement._owner._instance.handleListScroll();
 
 	};
+    
+    this.patchSectionHeight = function(selector, funcName) {
+        //get stuff, make stuff
+        var instList = $(selector);
+        if (instList.length === 0) throw "Could not find selector.";
+
+        var newVar2 = $('.containerDefault-1bbItS').height();
+        var patchedFunc = function() {return newVar2;};
+        
+        const getInternalInstance = e => e[Object.keys(e).find(k => k.startsWith("__reactInternalInstance"))];
+        var inst = getInternalInstance(instList[0]);
+        inst._currentElement._owner._currentElement._owner._currentElement._owner._instance.getSectionHeight =  patchedFunc;
+        inst._currentElement._owner._currentElement._owner._currentElement._owner._instance.handleListScroll();
+    };
 };
