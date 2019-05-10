@@ -2,8 +2,8 @@
 
 This repo contains a list of all public themes and plugins I have made for [BetterDiscord](https://betterdiscord.net/home/).
 
-### Warning
-This "project" is abandoned. I will no longer support these themes/plugins or work on them. All these themes and plugins may or may not work. Go try them if you really need them, and open an issue if something is wrong (please avoid duplicate issues), but don't expect any work from me.
+# Warning
+This "project" is **abandoned**. I no longer support these themes/plugins or work on them. Some of them don't work. Please do not contact me if this is the case. I won't update them. You can find my more recent work [here](https://github.com/HoLLy-HaCKeR/DiscordCSS).
 
 ### [Plugins](Plugins)
 * [Transparency Patcher](Plugins/transparency_patcher.md), a plugin to allow transparent themes
